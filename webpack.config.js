@@ -10,7 +10,7 @@ const isProd = !isDev;
 module.exports = {
     context: path.resolve(__dirname, "src"),
     entry: {
-        main: "./app.tsx"
+        main: "./index.tsx"
     },
     output: {
         filename: "[name].[contenthash].js",
@@ -29,7 +29,7 @@ module.exports = {
         })
     ],
     resolve: {
-        extensions: [".ts", ".tsx"]
+        extensions: [".ts", ".tsx", ".js"]
     },
     devServer: {
         port: 4200,
@@ -37,7 +37,8 @@ module.exports = {
             "/api": {
                 target: "https://localhost:44382"
             }
-        }
+        },
+        writeToDisk: true
     },
     devtool: isDev ? "source-map" : undefined,
     module: {

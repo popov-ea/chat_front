@@ -1,7 +1,7 @@
 import axios from "axios";
 import apiUrl from "./apiUrl";
 
-function client<T>(url: string, data: any) {
+function client<T>(url: string, data: any = null) {
     if (!data) {
         return axios.get(url);
     }
