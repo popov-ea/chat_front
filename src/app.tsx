@@ -1,9 +1,16 @@
 import React from "react";
-import { useAuth } from "./context/authContext";
+import { BrowserRouter, Switch, Route } from "react-router-dom";
+import AuthRoute from "./route/authRoute";
+import routes from "./route/routes";
 
 const App = () => {
-    const user = useAuth();
-    return user ? <div>no user</div> : <div>nice))</div>
+    return <BrowserRouter>
+        <Switch>
+            <Route path={routes.login}></Route>
+            <AuthRoute path={routes.default}></AuthRoute>
+            <AuthRoute path={routes.home}></AuthRoute>
+        </Switch>
+    </BrowserRouter>
 }
 
 export default App;
