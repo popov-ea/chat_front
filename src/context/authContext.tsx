@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, ProviderProps, useContext, useEffect, useState } from "react";
 import { client } from "../api/client";
 import authService from "../auth/authService";
 import authHeaders from "../auth/authHeaders";
@@ -18,7 +18,7 @@ interface AuthState {
 
 const AuthContext = createContext<AuthState>({state: "pending", error: null, user: null});
 
-const AuthProvider = (props) => {
+const AuthProvider = ({children}: ProviderProps<AuthState>) => {
     const [state, setState] = useState<AuthState>({
         state: "pending",
         user: null,
@@ -26,6 +26,10 @@ const AuthProvider = (props) => {
     });
 
     useEffect(() => {
+        if (state.state !== "pending") {
+            return;
+        }
+
         const token = authService.getAuthToken();
         if (!token) {
             setState({
@@ -33,10 +37,8 @@ const AuthProvider = (props) => {
                 user: null,
                 error: null
             });
-            return;
-        }
-
-        client("auth/verify", {headers: authHeaders()})
+        } else {
+            client("auth/verify", {headers: authHeaders()})
             .then(() => {
                 const userInfo = authService.getUserInfo();
                 setState({
@@ -52,13 +54,14 @@ const AuthProvider = (props) => {
                     error: err
                 })
             });
+        }        
     })
 
     if (state.state === "pending") {
         return <div>loading...</div>;
     }
 
-    return <AuthContext.Provider value={state}>{props}</AuthContext.Provider>
+    return <AuthContext.Provider value={state}>{children}</AuthContext.Provider>
 }
 
 const useAuth = () => useContext(AuthContext);

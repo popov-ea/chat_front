@@ -38,15 +38,16 @@ module.exports = {
                 target: "https://localhost:44382"
             }
         },
-        writeToDisk: true
+        writeToDisk: true,
+        historyApiFallback: true
     },
     devtool: isDev ? "source-map" : undefined,
     module: {
-        rules:  [
+        rules: [
             {
                 test: /\.css/,
                 use: [MiniCssExtractPlugin.loader, "css-loader"]
-            }, 
+            },
             {
                 test: /\.(ts|tsx)/,
                 exclude: /node_modules/,
