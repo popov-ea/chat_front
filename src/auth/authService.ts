@@ -36,17 +36,17 @@ const getUserInfo = (): UserInfo => {
 const handleLoginResult = (loginResult: LoginResult) => {
     localStorage.setItem(authTokenKey, loginResult.token);
     localStorage.setItem(authTokenKey, JSON.stringify({
-        userId: loginResult.userId, 
+        userId: loginResult.userId,
         userName: loginResult.userName
     }));
 }
 
-const login = async (loginData: LoginData) :Promise<LoginResult> => {
+const login = async (loginData: LoginData): Promise<LoginResult> => {
     if (!loginData.login || !loginData.password) {
         throw new Error("Invalid data");
     }
 
-    return client<LoginData>("auth/login", loginData)
+    return client<LoginData>("auth/login", { data: loginData })
         .then((response) => {
             const loginResult = response.data;
             handleLoginResult(loginResult);
@@ -59,7 +59,7 @@ const register = async (registerData: RegisterData) => {
         throw new Error("Invalid data");
     }
 
-    return client<LoginResult>("auth/register", registerData)
+    return client<LoginResult>("auth/register", { data: registerData })
         .then((response) => {
             const loginResult = response.data;
             handleLoginResult(loginResult);

@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { client } from "../api/client";
 import authService from "../auth/authService";
+import authHeaders from "../auth/authHeaders";
 
 interface User {
     id: number,
@@ -35,7 +36,7 @@ const AuthProvider = (props) => {
             return;
         }
 
-        client("auth/verify")
+        client("auth/verify", {headers: authHeaders()})
             .then(() => {
                 const userInfo = authService.getUserInfo();
                 setState({
