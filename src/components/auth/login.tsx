@@ -5,6 +5,8 @@ import {
     Typography,
     Button
 } from "@material-ui/core";
+import { useHistory } from "react-router-dom";
+import routes from "../../route/routes";
 
 const useStyle = makeStyles((theme) => ({
     paper: {
@@ -16,7 +18,7 @@ const useStyle = makeStyles((theme) => ({
         justifyContent: "flex-start",
         flexDirection: "column",
         overflow: "hidden",
-        height: 300,
+        height: 330,
         borderRadius: 5,
         boxShadow: "0 0 10px rgba(0,0,0,0.5)" 
     },
@@ -35,8 +37,7 @@ const useStyle = makeStyles((theme) => ({
     input: {
         margin: "auto",
         paddingTop: 10,
-        minWidth: 280,
-        maxWidth: 350
+        width: 300
     },
     buttonContainer: {
         display: "flex",
@@ -55,6 +56,7 @@ const Login = () => {
         login: "",
         password: ""
     });
+    const history = useHistory();
 
     const classes = useStyle();
 
@@ -64,6 +66,10 @@ const Login = () => {
             ...state,
             [id]: event.target.value
         })
+    }
+
+    const onRegisterClick = () => {
+        history.push(routes.register);
     }
 
     return <div className={classes.paper}>
@@ -89,8 +95,8 @@ const Login = () => {
             className={classes.input}
         />
         <div className={classes.buttonContainer}>
-            <Button>Register</Button>
-            <Button className={classes.sendBtn}>Send it!</Button>
+            <Button onClick={onRegisterClick}>Sign up</Button>
+            <Button className={classes.sendBtn}>Done!</Button>
         </div>
     </div>;
 };

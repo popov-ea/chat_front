@@ -2,6 +2,7 @@ import React, { createContext, ProviderProps, useContext, useEffect, useState } 
 import { client } from "../api/client";
 import authService from "../auth/authService";
 import authHeaders from "../auth/authHeaders";
+import ghostLoader from "../assets/images/ghost.png";
 
 interface User {
     id: number,
@@ -16,9 +17,9 @@ interface AuthState {
 }
 
 
-const AuthContext = createContext<AuthState>({state: "pending", error: null, user: null});
+const AuthContext = createContext<AuthState>({ state: "pending", error: null, user: null });
 
-const AuthProvider = ({children}: ProviderProps<AuthState>) => {
+const AuthProvider = ({ children }: ProviderProps<AuthState>) => {
     const [state, setState] = useState<AuthState>({
         state: "pending",
         user: null,
@@ -38,27 +39,29 @@ const AuthProvider = ({children}: ProviderProps<AuthState>) => {
                 error: null
             });
         } else {
-            client("auth/verify", {headers: authHeaders()})
-            .then(() => {
-                const userInfo = authService.getUserInfo();
-                setState({
-                    state: "success",
-                    user: {token, userName: userInfo.userName, id: userInfo.userId},
-                    error: null
-                });
-            })
-            .catch((err) => {
-                setState({
-                    state: "error",
-                    user: null,
-                    error: err
+            client("auth/verify", { headers: authHeaders() })
+                .then(() => {
+                    const userInfo = authService.getUserInfo();
+                    setState({
+                        state: "success",
+                        user: { token, userName: userInfo.userName, id: userInfo.userId },
+                        error: null
+                    });
                 })
-            });
-        }        
+                .catch((err) => {
+                    setState({
+                        state: "error",
+                        user: null,
+                        error: err
+                    })
+                });
+        }
     })
 
     if (state.state === "pending") {
-        return <div>loading...</div>;
+        return <div style={{ display: "flex", height: "95vh", justifyContent: "center", alignItems: "center" }}>
+            <img src={ghostLoader} style={{ width: "100px", height: "100px" }} />
+        </div>;
     }
 
     return <AuthContext.Provider value={state}>{children}</AuthContext.Provider>
